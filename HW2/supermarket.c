@@ -118,7 +118,7 @@ int addCustomerHelper(Supermarket* pSupermarket, Customer* pCustomer)
 {
 	int arrSize = pSupermarket->customerArrSize;
 	Customer* newCustomerArr = (Customer*)realloc(pSupermarket->customerArr, (arrSize + 1) * sizeof(Customer));
-	if (newCustomerArr == NULL)
+	if (!newCustomerArr)
 	{
 		printf("MEMORY ERROR!\n");
 		return 0;
@@ -140,12 +140,12 @@ void customerShopping(Supermarket* pSupermarket)
 	printMarket(pSupermarket);
 	printf("Please enter existing customer name to start shopping\n");
 	Customer* shoppingCustomer = createNewCustomer(); // malloc
-	if (shoppingCustomer == NULL)
+	if (!shoppingCustomer)
 	{
 		return;
 	}
 	Customer* isCustomerExist = checkCustomerExists(pSupermarket, shoppingCustomer);
-	if (isCustomerExist == NULL)
+	if (!isCustomerExist)
 	{
 		printf("Error: Customer doesnt exist, returning\n");
 		freeCustomer(shoppingCustomer); // free
@@ -157,8 +157,8 @@ void customerShopping(Supermarket* pSupermarket)
 
 void customerShoppingHelper(Supermarket* pSupermarket, const Customer* pCustomer)
 {
-	int isEmptySupermarket = isSupermarketEmpty(pSupermarket);
-	if (isEmptySupermarket)
+	int isEmptyMarket = isSupermarketEmpty(pSupermarket);
+	if (isEmptyMarket)
 	{
 		printf("Error: Market out of stock! returning\n");
 		return; // will free
@@ -274,8 +274,8 @@ int checkValidMarket(const Supermarket* pSupermarket)
 		printf("Error: No products exist yet, returning\n");
 		return 0;
 	}
-	int isEmptySupermarket = isSupermarketEmpty(pSupermarket);
-	if (isEmptySupermarket)
+	int isEmptyMarket = isSupermarketEmpty(pSupermarket);
+	if (isEmptyMarket)
 	{
 		printf("Error: No stock is available, returning\n");
 		return 0;
@@ -462,11 +462,11 @@ void exitMarket(Supermarket* pSupermarket)
 		if (pSupermarket->customerArr[i].cart->shoppingCartSize > 0)
 		{
 			printf("Customer %s payment\n", pSupermarket->customerArr[i].name);
-			Shoppingcart* cart = pSupermarket->customerArr[i].cart;
-			if (cart->shoppingCartSize > 0)
+			Shoppingcart* pCart = pSupermarket->customerArr[i].cart;
+			if (pCart->shoppingCartSize > 0)
 			{
-				printShoppingCart(cart);
-				printf("Price: %.2lf\n", calcShoppingCart(cart));
+				printShoppingCart(pCart);
+				printf("Price: %.2lf\n", calcShoppingCart(pCart));
 				printf("-----PAYMENT DONE-----\n\n");
 			}
 		}
