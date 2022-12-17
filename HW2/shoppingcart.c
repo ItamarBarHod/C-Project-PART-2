@@ -46,14 +46,14 @@ void deleteShoppingCart(Shoppingcart* pShoppingCart)
 int addItemToCart(Shoppingcart* pShoppingCart, const Product* pProduct, int numberToPurchase) // check works
 {
 	int cartSize = pShoppingCart->shoppingCartSize;
-	Shoppingitem** tempArr = (Shoppingitem**)realloc(pShoppingCart->itemsArr, (cartSize + 1) * sizeof(Shoppingitem*));
-	if (!tempArr)
+	Shoppingitem* newItem = initShoppingItem(); // malloc
+	if (!newItem)
 	{
 		printf("MEMORY ERROR\n");
 		return 0;
 	}
-	Shoppingitem* newItem = initShoppingItem(); // malloc
-	if (!newItem)
+	Shoppingitem** tempArr = (Shoppingitem**)realloc(pShoppingCart->itemsArr, (cartSize + 1) * sizeof(Shoppingitem*));
+	if (!tempArr)
 	{
 		printf("MEMORY ERROR\n");
 		return 0;
