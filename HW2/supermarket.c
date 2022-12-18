@@ -459,16 +459,13 @@ void exitMarket(Supermarket* pSupermarket)
 {
 	for (int i = 0; i < pSupermarket->customerArrSize; i++)
 	{
-		if (pSupermarket->customerArr[i].cart->shoppingCartSize > 0)
+		Shoppingcart* pCart = pSupermarket->customerArr[i].cart;
+		if (pCart->shoppingCartSize > 0)
 		{
 			printf("Customer %s payment\n", pSupermarket->customerArr[i].name);
-			Shoppingcart* pCart = pSupermarket->customerArr[i].cart;
-			if (pCart->shoppingCartSize > 0)
-			{
-				printShoppingCart(pCart);
-				printf("Price: %.2lf\n", calcShoppingCart(pCart));
-				printf("-----PAYMENT DONE-----\n\n");
-			}
+			printShoppingCart(pCart);
+			printf("Price: %.2lf\n", calcShoppingCart(pCart));
+			printf("-----PAYMENT DONE-----\n\n");
 		}
 	}
 	deleteSuperMarket(pSupermarket);
