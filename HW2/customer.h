@@ -2,6 +2,7 @@
 
 #include "shoppingcart.h"
 #include "stringfuncs.h"
+#include "userinput.h"
 
 typedef struct {
 	char* name;

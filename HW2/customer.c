@@ -1,5 +1,4 @@
 #include "customer.h"
-#include "userinput.h"
 
 void printCustomer(const Customer* pCustomer)
 {
