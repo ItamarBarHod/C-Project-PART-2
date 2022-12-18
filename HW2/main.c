@@ -4,6 +4,11 @@ int main()
 {
 	Supermarket market;
 	createSuperMarket(&market);
+	if (!&market)
+	{
+		printf("MEMORY ERROR\n");
+		return 0;
+	}
 	int flag = 1;
 	int option;
 	while (flag)
