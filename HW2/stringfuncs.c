@@ -150,7 +150,7 @@ int validTokens(const char* str)
 
 char* fixAddressStreetAndCity(char* str)
 {
-	char tempString[MAX_SIZE] = "";
+	char tempString[MAX_SIZE] = { 0 };
 	const char* delimiter = " ";
 	char* token, * lastWord, * firstWord;
 	firstWord = str;

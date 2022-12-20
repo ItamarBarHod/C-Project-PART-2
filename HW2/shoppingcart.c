@@ -45,13 +45,13 @@ void deleteShoppingCart(Shoppingcart* pShoppingCart)
 
 int addItemToCart(Shoppingcart* pShoppingCart, const Product* pProduct, int numberToPurchase) // check works
 {
-	int cartSize = pShoppingCart->shoppingCartSize;
 	Shoppingitem* newItem = initShoppingItem(); // malloc
 	if (!newItem)
 	{
 		printf("MEMORY ERROR\n");
 		return 0;
 	}
+	int cartSize = pShoppingCart->shoppingCartSize;
 	Shoppingitem** tempArr = (Shoppingitem**)realloc(pShoppingCart->itemsArr, (cartSize + 1) * sizeof(Shoppingitem*));
 	if (!tempArr)
 	{
@@ -67,28 +67,15 @@ int addItemToCart(Shoppingcart* pShoppingCart, const Product* pProduct, int numb
 	return 1;
 }
 
-int checkItemExists(const Shoppingcart* pShoppingCart, const Product* pProduct)
+Shoppingitem* checkItemExists(const Shoppingcart* pShoppingCart, const Product* pProduct)
 {
 	for (int i = 0; i < pShoppingCart->shoppingCartSize; i++)
 	{
 		int equal = strcmp(pShoppingCart->itemsArr[i]->barcode, pProduct->barcode);
 		if (equal == 0)
 		{
-			return 1;
+			return pShoppingCart->itemsArr[i];
 		}
 	}
-	return 0;
-}
-
-int getItemPos(const Shoppingcart* pShoppingCart, const Product* pProduct)
-{
-	for (int i = 0; i < pShoppingCart->shoppingCartSize; i++)
-	{
-		int equal = strcmp(pShoppingCart->itemsArr[i]->barcode, pProduct->barcode);
-		if (equal == 0)
-		{
-			return i;
-		}
-	}
-	return -1;
+	return NULL;
 }

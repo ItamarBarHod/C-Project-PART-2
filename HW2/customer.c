@@ -17,6 +17,7 @@ Customer* createNewCustomer()
 	if (!tempCustomer->cart)
 	{
 		printf("MEMORY ERROR\n");
+		free(tempCustomer);
 		return NULL;
 	}
 	printf("Enter customer name\n");
