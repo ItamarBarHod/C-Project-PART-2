@@ -14,7 +14,6 @@ Product* createNewProduct(char* barcode)
 		return NULL;
 	}
 	strcpy(tempProd->barcode, barcode); // barcode is local in this scope
-
 	printf("Please enter a product name, maximum size %d\n", PRODUCT_SIZE - 1);
 	char* prodName = getNameFromUser(PRODUCT_SIZE); // malloc 
 	if (!prodName)

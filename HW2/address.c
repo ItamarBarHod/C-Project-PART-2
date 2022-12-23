@@ -7,19 +7,26 @@ void printAddress(const Address* pAdd)
 
 Address* getAddressData()
 {
-	char* address = getAddressFromUser();
-	if (!address)
+	char* tempAddress = getAddressFromUser(); // malloc string
+	if (!tempAddress)
 	{
 		return NULL;
 	}
-	Address* newAddress = (Address*)malloc(sizeof(Address));
+	Address* newAddress = (Address*)malloc(sizeof(Address)); // malloc
 	if (!newAddress)
 	{
 		printf("MEMORY ERROR\n");
-		free(address);
+		free(tempAddress);
 		return NULL;
 	}
-	fixValidAddress(newAddress, address);
+	int isValid = fixValidAddress(newAddress, tempAddress);
+	if (!isValid)
+	{
+		free(tempAddress);
+		freeAddress(newAddress);
+		free(newAddress); // freeaddress is made for supermarket abstraction
+		return NULL;
+	}
 	return newAddress;
 }
 
@@ -29,10 +36,10 @@ void freeAddress(Address* pAdd)
 	pAdd->city = NULL;
 	free(pAdd->streetName);
 	pAdd->streetName = NULL;
-	pAdd = NULL; // part of supermarket cannot be free'd unless sm is free
+	pAdd = NULL;
 }
 
-void fixValidAddress(Address* pAdd, char* address)
+int fixValidAddress(Address* pAdd, char* address)
 {
 	const char* delimiter = "#";
 	char* street = strtok(address, delimiter);
@@ -41,14 +48,15 @@ void fixValidAddress(Address* pAdd, char* address)
 	pAdd->streetName = fixAddressStreetAndCity(street); // malloc
 	if (!pAdd->streetName)
 	{
-		return;
+		return 0;
 	}
 	pAdd->streetNum = atoi(streetNum);
 	pAdd->city = fixAddressStreetAndCity(city); // malloc
 	if (!pAdd->city)
 	{
-		return;
+		return 0;
 	}
+	return 1;
 }
 
 void printAddressInstructions()
