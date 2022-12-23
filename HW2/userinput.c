@@ -29,22 +29,21 @@ float getNumberFromUser()
 
 char* getNameFromUser(int maxNameSize)
 {
-	char temp[MAX_SIZE];
-	char* name;
+	char tempName[MAX_SIZE];
 	do {
-		name = fgets(temp, MAX_SIZE, stdin);
-		if (strlen(temp) > maxNameSize)
+		fgets(tempName, MAX_SIZE, stdin);
+		if (strlen(tempName) > maxNameSize)
 		{
 			printf("Error: input too long, please re-enter\n");
 		}
-	} while (!name || strlen(temp) == 1 || strlen(temp) > maxNameSize);
-	name = _strdup(temp); // malloc
+	} while (!tempName || strlen(tempName) == 1 || strlen(tempName) > maxNameSize);
+	char* name = _strdup(tempName); // malloc
 	if (!name)
 	{
 		printf("MEMORY ERROR\n");
 		return NULL;
 	}
-	name[strlen(temp) - 1] = '\0';
+	name[strlen(tempName) - 1] = '\0';
 	return name;
 }
 
@@ -52,6 +51,7 @@ char* getBarcodeFromUser()
 {
 	char* tempBarcode;
 	int validBarcode;
+	printBarcodeInstructions();
 	do {
 		tempBarcode = getNameFromUser(MAX_SIZE); // malloc
 		if (!tempBarcode)
@@ -66,6 +66,20 @@ char* getBarcodeFromUser()
 	} while (!validBarcode);
 
 	return tempBarcode;
+}
+
+char* myGets(char* buffer, int size)
+{
+	if (buffer != NULL && size > 0)
+	{
+		if (fgets(buffer, size, stdin))
+		{
+			buffer[strcspn(buffer, "\n")] = '\0';
+			return buffer;
+		}
+		*buffer = '\0';
+	}
+	return NULL;
 }
 
 char* getAddressFromUser()

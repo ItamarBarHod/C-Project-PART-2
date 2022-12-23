@@ -19,7 +19,6 @@ typedef struct {
 }Product;
 
 void printProduct(const Product* pProduct);
-Product* insertProductData(Product* pProduct);
-Product* createNewProduct();
+Product* createNewProduct(char* barcode);
 void freeProduct(Product* pProduct);
 void printBarcodeInstructions();

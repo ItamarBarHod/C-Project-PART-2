@@ -10,5 +10,6 @@ typedef struct {
 }Customer;
 
 void printCustomer(const Customer* pCustomer);
-Customer* createNewCustomer();
+Customer* initCustomer();
+Customer* createNewCustomer(char* customerName);
 void freeCustomer(Customer* pCustomer);

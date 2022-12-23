@@ -26,7 +26,10 @@ Address* getAddressData()
 void freeAddress(Address* pAdd)
 {
 	free(pAdd->city);
+	pAdd->city = NULL;
 	free(pAdd->streetName);
+	pAdd->streetName = NULL;
+	pAdd = NULL; // part of supermarket cannot be free'd unless sm is free
 }
 
 void fixValidAddress(Address* pAdd, char* address)

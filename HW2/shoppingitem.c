@@ -19,4 +19,5 @@ Shoppingitem* initShoppingItem()
 void freeShoppingItem(Shoppingitem* pShoppingItem)
 {
 	free(pShoppingItem);
+	pShoppingItem = NULL;
 }

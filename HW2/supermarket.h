@@ -44,12 +44,12 @@ Product* getExistingProductFromUser(const Supermarket* pSupermarket);
 void putItemInCustomerCart(Supermarket* pSupermarket, const Customer* pCustomer, Product* pProduct, int amount);
 // 5: printCustomerShoppingCart - none
 // 6: customerCheckout
-void customerCheckoutHelper(const Supermarket* pSupermarket, const Customer* pCustomer);
+void customerCheckoutHelper(const Supermarket* pSupermarket, Customer* pCustomer);
 // 7: printProductType
 void printProductTypeHelper(const Supermarket* pSupermarket, int type);
 
 // general functions
 int isSupermarketEmpty(const Supermarket* pSupermarket);
-Product* checkProductExists(const Supermarket* pSupermarket, const Product* pProduct);
-Customer* checkCustomerExists(const Supermarket* pSupermarket, const Customer* pCustomer);
+Product* checkProductExists(const Supermarket* pSupermarket, const char* productName);
+Customer* checkCustomerExists(const Supermarket* pSupermarket, const char* pCustomer);
 int checkValidMarket(const Supermarket* pSupermarket);

@@ -15,6 +15,7 @@ int main()
 	{
 		printf("\nPlease choose one of the following options:\n1 - Show SuperMarket\n2 - Add Product\n3 - Add Customer\n4 - Customer Shopping\n5 - Print Shopping Cart\n6 - Customer Pay\n7 - Print Product By Type\n8 - Quit\n\n");
 		scanf(" %d", &option);
+		getchar(); // clear scanf \n
 		switch (option)
 		{
 		case 1:

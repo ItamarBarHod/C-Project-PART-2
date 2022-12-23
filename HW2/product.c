@@ -5,26 +5,7 @@ void printProduct(const Product* pProduct)
 	printf("%-*s %-*s %-*s %-*.2f %d\n", 27, pProduct->productName, 9, pProduct->barcode, 16, productTypes[pProduct->type], 14, pProduct->price, pProduct->stock);
 }
 
-Product* insertProductData(Product* pProduct)
-{
-	printf("Please enter a product name, maximum size %d\n", PRODUCT_SIZE - 1);
-	char* tempProdName = getNameFromUser(PRODUCT_SIZE);
-	if (!tempProdName)
-	{
-		return NULL;
-	}
-	strcpy(pProduct->productName, tempProdName);
-	free(tempProdName);
-
-	pProduct->type = getProductTypeFromUser();
-	printf("Please enter the price: ");
-	pProduct->price = getNumberFromUser();
-	printf("Please enter the amount (stock count): ");
-	pProduct->stock = (int)getNumberFromUser();
-	return pProduct;
-}
-
-Product* createNewProduct()
+Product* createNewProduct(char* barcode)
 {
 	Product* tempProd = (Product*)malloc(sizeof(Product));
 	if (!tempProd)
@@ -32,22 +13,29 @@ Product* createNewProduct()
 		printf("MEMORY ERROR\n");
 		return NULL;
 	}
-	printBarcodeInstructions();
-	char* tempBarcode;
-	tempBarcode = getBarcodeFromUser();
-	if (!tempBarcode)
+	strcpy(tempProd->barcode, barcode);
+
+	printf("Please enter a product name, maximum size %d\n", PRODUCT_SIZE - 1);
+	char* prodName = getNameFromUser(PRODUCT_SIZE); // malloc 
+	if (!prodName)
 	{
-		free(tempProd);
 		return NULL;
 	}
-	strcpy(tempProd->barcode, tempBarcode);
-	free(tempBarcode);
+	strcpy(tempProd->productName, prodName); // dynamic to static
+	free(prodName);
+
+	tempProd->type = getProductTypeFromUser();
+	printf("Please enter the price: ");
+	tempProd->price = getNumberFromUser();
+	printf("Please enter the amount (stock count): ");
+	tempProd->stock = (int)getNumberFromUser();
 	return tempProd;
 }
 
 void freeProduct(Product* pProduct)
 {
 	free(pProduct);
+	pProduct = NULL;
 }
 
 void printBarcodeInstructions()
