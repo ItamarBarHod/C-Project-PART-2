@@ -153,7 +153,7 @@ char* fixAddressStreetAndCity(char* str)
 	char tempString[MAX_SIZE] = { 0 };
 	const char* delimiter = " ";
 	char* token, * lastWord;
-	token = strtok(str, delimiter); // cant be NULL
+	token = strtok(str, delimiter);
 	if (!token)
 	{
 		printf("ADDRESS MEMORY ERROR\n");
@@ -166,13 +166,13 @@ char* fixAddressStreetAndCity(char* str)
 		*token = toupper(*token);
 		strcat(tempString, token);
 		strcat(tempString, "  ");
-		index += strlen(token) + 2;
+		index += (int)strlen(token) + 2;
 		lastWord = token;
 		token = strtok(NULL, delimiter);
 	}
-	index -= strlen(lastWord) + 2; // cant be 0
+	index -= (int)strlen(lastWord) + 2;
 	tempString[index] = tolower(tempString[index]);
-	index += strlen(lastWord);
+	index += (int)strlen(lastWord);
 	tempString[index] = '\0';
 	tempString[0] = toupper(tempString[0]);
 	char* fixedString = _strdup(tempString); // malloc

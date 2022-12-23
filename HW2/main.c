@@ -3,10 +3,10 @@
 int main()
 {
 	Supermarket market;
-	createSuperMarket(&market);
-	if (!&market)
+	int isInitMarket = createSuperMarket(&market);
+	if (!isInitMarket)
 	{
-		printf("MEMORY ERROR\n");
+		printf("MARKET MEMORY ERROR\n");
 		return 0;
 	}
 	int flag = 1;
@@ -15,7 +15,7 @@ int main()
 	{
 		printf("\nPlease choose one of the following options:\n1 - Show SuperMarket\n2 - Add Product\n3 - Add Customer\n4 - Customer Shopping\n5 - Print Shopping Cart\n6 - Customer Pay\n7 - Print Product By Type\n8 - Quit\n\n");
 		scanf(" %d", &option);
-		getchar(); // clear scanf \n
+		getchar(); // clear \n
 		switch (option)
 		{
 		case 1:
@@ -41,7 +41,7 @@ int main()
 			break;
 		case 8:
 			flag = 0;
-			exitMarket(&market); // free
+			exitMarket(&market); // free market's nested structs
 			printf("Bye bye!\n");
 			break;
 		default:

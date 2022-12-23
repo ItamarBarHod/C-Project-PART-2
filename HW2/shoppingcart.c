@@ -34,7 +34,7 @@ double calcShoppingCart(const Shoppingcart* pShoppingCart)
 	return sum;
 }
 
-void deleteShoppingCart(Shoppingcart* pShoppingCart)
+void freeShoppingCart(Shoppingcart* pShoppingCart)
 {
 	for (int i = 0; i < pShoppingCart->shoppingCartSize; i++)
 	{
@@ -46,9 +46,9 @@ void deleteShoppingCart(Shoppingcart* pShoppingCart)
 	pShoppingCart = NULL;
 }
 
-int addItemToCart(Shoppingcart* pShoppingCart, const Product* pProduct, int numberToPurchase)
+int addItemToCart(Shoppingcart* pShoppingCart, Product* pProduct, int numberToPurchase)
 {
-	Shoppingitem* newItem = initShoppingItem(); // malloc
+	Shoppingitem* newItem = initShoppingItem(pProduct); // malloc
 	if (!newItem)
 	{
 		printf("MEMORY ERROR\n");
@@ -62,9 +62,6 @@ int addItemToCart(Shoppingcart* pShoppingCart, const Product* pProduct, int numb
 		return 0;
 	}
 	tempArr[cartSize] = newItem;
-	tempArr[cartSize]->amount = numberToPurchase;
-	tempArr[cartSize]->price = pProduct->price;
-	strcpy(tempArr[cartSize]->barcode, pProduct->barcode);
 	pShoppingCart->shoppingCartSize++;
 	pShoppingCart->itemsArr = tempArr;
 	return 1;
