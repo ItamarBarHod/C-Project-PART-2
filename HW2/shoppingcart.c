@@ -46,7 +46,7 @@ void freeShoppingCart(Shoppingcart* pShoppingCart)
 	pShoppingCart = NULL;
 }
 
-int addItemToCart(Shoppingcart* pShoppingCart, const Product* pProduct, int numberToPurchase)
+int addItemToCart(Shoppingcart* pShoppingCart, Product* pProduct, int numberToPurchase)
 {
 	Shoppingitem* newItem = initShoppingItem(pProduct); // malloc
 	if (!newItem)
