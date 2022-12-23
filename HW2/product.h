@@ -20,5 +20,7 @@ typedef struct {
 
 void printProduct(const Product* pProduct);
 Product* createNewProduct(char* barcode);
+int getAmountToBuyFromUser(const Product* pProduct);
+void addAmountToExistingProduct(Product* pProduct);
 void freeProduct(Product* pProduct);
 void printBarcodeInstructions();

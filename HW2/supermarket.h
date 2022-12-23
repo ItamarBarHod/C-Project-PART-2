@@ -16,32 +16,30 @@ typedef struct {
 	int productArrSize;
 }Supermarket;
 
-void createSuperMarket(Supermarket* pSupermarket);
+int createSuperMarket(Supermarket* pSupermarket);
 
 // main funcs
 void printMarket(const Supermarket* pSupermarket);
 void addProduct(Supermarket* pSupermarket);
 void addCustomer(Supermarket* pSupermarket);
-void customerShopping(Supermarket* pSupermarket);
+void startShopping(Supermarket* pSupermarket);
 void printCustomerShoppingCart(const Supermarket* pSupermarket);
 void customerCheckout(const Supermarket* pSuperMarket);
 void printProductType(const Supermarket* pSupermarket);
 void exitMarket(Supermarket* pSupermarket);
-void deleteSuperMarket(Supermarket* pSupermarket);
+void freeSuperMarket(Supermarket* pSupermarket);
 
 // helpers / extra
 // 1: printMarket
 void printCustomers(const Supermarket* pSupermarket);
 // 2: addProduct
 int addProductHelper(Supermarket* pSupermarket, Product* pProduct);
-void addAmountToExistingProduct(Supermarket* pSupermarket, Product* pProduct);
 // 3: addCustomer
 int addCustomerHelper(Supermarket* pSupermarket, Customer* pCustomer);
 // 4: customerShopping
-void customerShoppingHelper(Supermarket* pSupermarket, const Customer* pCustomer);
-int getAmountToBuyFromUser(const Supermarket* pSupermarket, const Product* pProduct);
+void customerShopping(Supermarket* pSupermarket, const Customer* pCustomer);
 Product* getExistingProductFromUser(const Supermarket* pSupermarket);
-void putItemInCustomerCart(Supermarket* pSupermarket, const Customer* pCustomer, Product* pProduct, int amount);
+void putItemInCustomerCart(const Supermarket* pSupermarket, const Customer* pCustomer, Product* pProduct, int amount);
 // 5: printCustomerShoppingCart - none
 // 6: customerCheckout
 void customerCheckoutHelper(const Supermarket* pSupermarket, Customer* pCustomer);

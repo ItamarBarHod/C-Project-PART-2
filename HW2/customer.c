@@ -2,7 +2,14 @@
 
 void printCustomer(const Customer* pCustomer)
 {
-	printf("Customer name: %s\n", pCustomer->name);
+	if (pCustomer->cart->shoppingCartSize == 0)
+	{
+		printf("Customer name: %s --- shopping cart is empty!\n", pCustomer->name);
+	}
+	else
+	{
+		printf("Customer name: %s --- is currently doing shopping!\n", pCustomer->name);
+	}
 }
 
 Customer* initCustomer()
@@ -20,6 +27,7 @@ Customer* initCustomer()
 		freeCustomer(tempCustomer); // free
 		return NULL;
 	}
+	tempCustomer->name = NULL;
 	return tempCustomer;
 }
 
@@ -38,6 +46,7 @@ Customer* createNewCustomer(char* customerName)
 	tempCustomer->name = _strdup(customerName);
 	if (!tempCustomer->name)
 	{
+		printf("Customer MEMORY ERROR\n");
 		freeCustomer(tempCustomer); // free
 		return NULL;
 	}
@@ -48,7 +57,7 @@ void freeCustomer(Customer* pCustomer)
 {
 	free(pCustomer->name);
 	pCustomer->name = NULL;
-	deleteShoppingCart(pCustomer->cart);
+	freeShoppingCart(pCustomer->cart);
 	pCustomer->cart = NULL;
 	free(pCustomer);
 	pCustomer = NULL;

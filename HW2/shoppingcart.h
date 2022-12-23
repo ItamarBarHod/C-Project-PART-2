@@ -13,4 +13,4 @@ Shoppingcart* initShoppingCart();
 int addItemToCart(Shoppingcart* pShoppingCart, const Product* pProduct, int numberToPurchase);
 double calcShoppingCart(const Shoppingcart* pShoppingCart);
 Shoppingitem* checkItemExists(const Shoppingcart* pShoppingCart, const Product* pProduct);
-void deleteShoppingCart(Shoppingcart* pShoppingCart);
+void freeShoppingCart(Shoppingcart* pShoppingCart);
