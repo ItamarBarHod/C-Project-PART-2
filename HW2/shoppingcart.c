@@ -14,7 +14,7 @@ Shoppingcart* initShoppingCart()
 	Shoppingcart* tempCart = (Shoppingcart*)malloc(sizeof(Shoppingcart));
 	if (!tempCart)
 	{
-		printf("MEMORY ERROR\n");
+		printf("MEMORY ERROR: Could not init cart\n");
 		return NULL;
 	}
 	tempCart->shoppingCartSize = 0;
@@ -46,28 +46,66 @@ void freeShoppingCart(Shoppingcart* pShoppingCart)
 	pShoppingCart = NULL;
 }
 
-int addItemToCart(Shoppingcart* pShoppingCart, Product* pProduct, int numberToPurchase)
+int addItemToCart(Shoppingcart* pCart, Product* pProduct, int amount)
 {
-	Shoppingitem* newItem = initShoppingItem(); // malloc
-	if (!newItem)
+	Shoppingitem* itemExists = checkItemExists(pCart, pProduct);
+	if (itemExists)
 	{
-		printf("MEMORY ERROR\n");
-		return 0;
+		itemExists->amount += amount;
 	}
-	int cartSize = pShoppingCart->shoppingCartSize + 1;
-	Shoppingitem** tempArr = (Shoppingitem**)realloc(pShoppingCart->itemsArr, cartSize * sizeof(Shoppingitem*)); // malloc
+	else
+	{
+		Shoppingitem* newItem = initShoppingItem(pProduct, amount); // malloc
+		if (!newItem)
+		{
+			return 0;
+		}
+		int reallocSuccess = addItemToCartHelper(pCart, newItem);
+		if (!reallocSuccess)
+		{
+			freeShoppingItem(newItem); // free
+			return 0;
+		}
+	}
+	pProduct->stock -= amount; // reduce from stock (pProduct cant be const)
+	printf("Product: %s (%s) stock left: %d\n", pProduct->productName, pProduct->barcode, pProduct->stock);
+	return 1;
+}
+
+int addItemToCartHelper(Shoppingcart* pShoppingCart, Shoppingitem* newItem)
+{
+	int newCartSize = pShoppingCart->shoppingCartSize + 1;
+	Shoppingitem** tempArr = (Shoppingitem**)realloc(pShoppingCart->itemsArr, newCartSize * sizeof(Shoppingitem*)); // malloc
 	if (!tempArr)
 	{
-		printf("MEMORY ERROR\n");
+		printf("MEMORY ERROR: Could not add item to cart\n");
 		return 0;
 	}
-	strcpy(newItem->barcode, pProduct->barcode);
-	newItem->amount = numberToPurchase;
-	newItem->price = pProduct->price;
-	tempArr[cartSize - 1] = newItem;
+	tempArr[newCartSize - 1] = newItem;
 	pShoppingCart->shoppingCartSize++;
 	pShoppingCart->itemsArr = tempArr;
 	return 1;
+}
+
+void printCartAndPrice(Shoppingcart* pCart)
+{
+	if (pCart->shoppingCartSize > 0)
+	{
+		printShoppingCart(pCart);
+		printf("Paying! Price of to pay: %.2lf\n", calcShoppingCart(pCart));
+		freeShoppingCart(pCart);
+		pCart = initShoppingCart(); // malloc
+		if (!pCart)
+		{
+			printf("MEMORY ERROR\n");
+			return;
+		}
+		printf("Returned shopping cart!\n");
+		printf("--------PAYMENT DONE--------\n");
+		return;
+	}
+	// else no items in cart
+	printf("Error: This customer has no items yet, returning to main menu\n");
 }
 
 Shoppingitem* checkItemExists(const Shoppingcart* pShoppingCart, const Product* pProduct)

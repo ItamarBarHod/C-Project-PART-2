@@ -36,7 +36,7 @@ void freeAddress(Address* pAdd)
 	pAdd->city = NULL;
 	free(pAdd->streetName);
 	pAdd->streetName = NULL;
-	pAdd = NULL;
+	pAdd = NULL; // part of supermarket in this exercise
 }
 
 int fixValidAddress(Address* pAdd, char* address)

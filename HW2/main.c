@@ -42,7 +42,6 @@ int main()
 		case -1:
 			flag = 0;
 			exitMarket(&market); // force payments and free market
-			printf("Bye bye!\n");
 			break;
 		default:
 			printf("Error: no such option!\n");

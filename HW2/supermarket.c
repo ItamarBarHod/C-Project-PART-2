@@ -67,14 +67,14 @@ void addProduct(Supermarket* pSupermarket)
 
 int addProductHelper(Supermarket* pSupermarket, Product* pProduct)
 {
-	int arrSize = pSupermarket->productArrSize + 1;
-	Product** newProductArr = (Product**)realloc(pSupermarket->productArr, arrSize * sizeof(Product*));
+	int newArrSize = pSupermarket->productArrSize + 1;
+	Product** newProductArr = (Product**)realloc(pSupermarket->productArr, newArrSize * sizeof(Product*));
 	if (!newProductArr)
 	{
 		printf("MEMORY ERROR: Could not add product\n");
 		return 0;
 	}
-	newProductArr[arrSize - 1] = pProduct;
+	newProductArr[newArrSize - 1] = pProduct;
 	pSupermarket->productArrSize++;
 	pSupermarket->productArr = newProductArr;
 	return 1;
@@ -111,14 +111,14 @@ void addCustomer(Supermarket* pSupermarket)
 
 int addCustomerHelper(Supermarket* pSupermarket, Customer* pCustomer)
 {
-	int arrSize = pSupermarket->customerArrSize + 1;
-	Customer* newCustomerArr = (Customer*)realloc(pSupermarket->customerArr, arrSize * sizeof(Customer));
+	int newArrSize = pSupermarket->customerArrSize + 1;
+	Customer* newCustomerArr = (Customer*)realloc(pSupermarket->customerArr, newArrSize * sizeof(Customer));
 	if (!newCustomerArr)
 	{
-		printf("MEMORY ERROR!\n");
+		printf("MEMORY ERROR: Could not add customer\n");
 		return 0;
 	}
-	newCustomerArr[arrSize - 1] = *pCustomer;
+	newCustomerArr[newArrSize - 1] = *pCustomer;
 	pSupermarket->customerArrSize++;
 	pSupermarket->customerArr = newCustomerArr;
 	return 1;
@@ -146,7 +146,7 @@ void startShopping(Supermarket* pSupermarket)
 	}
 	else
 	{
-		customerShopping(pSupermarket, isCustomerExist); // start shopping
+		customerShopping(pSupermarket, isCustomerExist); // start customer shopping
 	}
 }
 
@@ -167,7 +167,11 @@ void customerShopping(Supermarket* pSupermarket, const Customer* pCustomer)
 	int amount = getAmountToBuyFromUser(isProductExist);
 	if (amount != 0)
 	{
-		putItemInCustomerCart(pSupermarket, pCustomer, isProductExist, amount);
+		int isAdded = addItemToCart(pCustomer->cart, isProductExist, amount);
+		if (!isAdded)
+		{
+			return; // adding failed - prints error inside
+		}
 	}
 	printf("Would you like to continue shopping?\n");
 	int proceedShopping = askUserToContinue();
@@ -175,27 +179,6 @@ void customerShopping(Supermarket* pSupermarket, const Customer* pCustomer)
 	{
 		customerShopping(pSupermarket, pCustomer);
 	}
-}
-
-void putItemInCustomerCart(const Supermarket* pSupermarket, const Customer* pCustomer, Product* pProduct, int amount)
-{
-	Shoppingcart* pCart = pCustomer->cart;
-	Shoppingitem* itemExists = checkItemExists(pCart, pProduct);
-	if (itemExists)
-	{
-		itemExists->amount += amount;
-	}
-	else
-	{
-		int reallocSuccess = addItemToCart(pCart, pProduct, amount);
-		if (!reallocSuccess)
-		{
-			printf("Error: couldnt add item to shopping cart\n");
-			return;
-		}
-	}
-	pProduct->stock -= amount; // reduce from stock (pProduct cant be const)
-	printf("Product: %s (%s) stock left: %d\n", pProduct->productName, pProduct->barcode, pProduct->stock);
 }
 
 Product* getExistingProductFromUser(const Supermarket* pSupermarket)
@@ -307,29 +290,7 @@ void customerCheckout(const Supermarket* pSupermarket)
 		printf("Error: No such customer exists, returning to main menu\n");
 		return;
 	}
-	customerCheckoutHelper(pSupermarket, isCustomerExist);
-}
-
-void customerCheckoutHelper(const Supermarket* pSupermarket, Customer* pCustomer)
-{
-	Shoppingcart* pCart = pCustomer->cart;
-	if (pCart->shoppingCartSize > 0)
-	{
-		printShoppingCart(pCart);
-		printf("Paying! Price of to pay: %.2lf\n", calcShoppingCart(pCart));
-		freeShoppingCart(pCart);
-		pCustomer->cart = initShoppingCart();
-		if (!pCustomer->cart)
-		{
-			printf("MEMORY ERROR\n");
-			return;
-		}
-		printf("Returned shopping cart!\n");
-		printf("--------PAYMENT DONE--------\n");
-		return;
-	}
-	// else no items in cart
-	printf("Error: This customer has no items yet, returning to main menu\n");
+	printCartAndPrice(isCustomerExist->cart);
 }
 
 void printProductType(const Supermarket* pSupermarket)
@@ -339,7 +300,7 @@ void printProductType(const Supermarket* pSupermarket)
 		printf("Error: No products exist yet\n");
 		return;
 	}
-	productType type = getProductTypeFromUser();
+	int type = getProductTypeFromUser();
 	printf("\nPrinting product of type: %s\n\n", productTypes[type]);
 	printf("Product Name ------------ | BARCODE | Type  -------- | Price ------ | Stock \n");
 	printf("----------------------------------------------------------------------------\n");
@@ -392,18 +353,20 @@ Customer* checkCustomerExists(const Supermarket* pSupermarket, const char* pCust
 
 void exitMarket(Supermarket* pSupermarket)
 {
+	printf("\nEXITING MARKET\n");
 	for (int i = 0; i < pSupermarket->customerArrSize; i++)
 	{
 		Shoppingcart* pCart = pSupermarket->customerArr[i].cart;
 		if (pCart->shoppingCartSize > 0)
 		{
-			printf("Customer %s payment\n", pSupermarket->customerArr[i].name);
+			printf("\nCustomer %s payment\n", pSupermarket->customerArr[i].name);
 			printShoppingCart(pCart);
 			printf("Price: %.2lf\n", calcShoppingCart(pCart));
-			printf("-----PAYMENT DONE-----\n\n");
+			printf("--------PAYMENT DONE--------\n\n");
 		}
 	}
 	freeSuperMarket(pSupermarket);
+	printf("\nBye bye!\n");
 }
 
 void freeSuperMarket(Supermarket* pSupermarket)
