@@ -32,7 +32,7 @@ void printMarket(const Supermarket* pSupermarket)
 	{
 		printProduct(pSupermarket->productArr[i]);
 	}
-	printf("\nThere are (%d) listed customer(s)\n", pSupermarket->customerArrSize);
+	printf("\nThere are %d listed customer(s)\n", pSupermarket->customerArrSize);
 	printCustomers(pSupermarket);
 	printf("\n");
 }
@@ -67,14 +67,14 @@ void addProduct(Supermarket* pSupermarket)
 
 int addProductHelper(Supermarket* pSupermarket, Product* pProduct)
 {
-	int arrSize = pSupermarket->productArrSize;
-	Product** newProductArr = (Product**)realloc(pSupermarket->productArr, (arrSize + 1) * sizeof(Product*));
+	int arrSize = pSupermarket->productArrSize + 1;
+	Product** newProductArr = (Product**)realloc(pSupermarket->productArr, arrSize * sizeof(Product*));
 	if (!newProductArr)
 	{
 		printf("MEMORY ERROR: Could not add product\n");
 		return 0;
 	}
-	newProductArr[arrSize] = pProduct;
+	newProductArr[arrSize - 1] = pProduct;
 	pSupermarket->productArrSize++;
 	pSupermarket->productArr = newProductArr;
 	return 1;
@@ -102,7 +102,7 @@ void addCustomer(Supermarket* pSupermarket)
 		if (!reallocSuccess)
 		{
 			printf("ERROR: Could not add customer\n");
-			freeCustomer(newCustomer); // free customer
+			freeTempCustomer(newCustomer); // free customer
 		}
 		return;
 	}
@@ -111,14 +111,14 @@ void addCustomer(Supermarket* pSupermarket)
 
 int addCustomerHelper(Supermarket* pSupermarket, Customer* pCustomer)
 {
-	int arrSize = pSupermarket->customerArrSize;
-	Customer* newCustomerArr = (Customer*)realloc(pSupermarket->customerArr, (arrSize + 1) * sizeof(Customer));
+	int arrSize = pSupermarket->customerArrSize + 1;
+	Customer* newCustomerArr = (Customer*)realloc(pSupermarket->customerArr, arrSize * sizeof(Customer));
 	if (!newCustomerArr)
 	{
 		printf("MEMORY ERROR!\n");
 		return 0;
 	}
-	newCustomerArr[arrSize] = *pCustomer;
+	newCustomerArr[arrSize - 1] = *pCustomer;
 	pSupermarket->customerArrSize++;
 	pSupermarket->customerArr = newCustomerArr;
 	return 1;
@@ -411,7 +411,11 @@ void freeSuperMarket(Supermarket* pSupermarket)
 	free(pSupermarket->marketName); // name
 	pSupermarket->marketName = NULL;
 	freeAddress(&pSupermarket->marketAddress); // address sections
-	free(pSupermarket->customerArr); // customers
+	for (int i = 0; i < pSupermarket->customerArrSize; i++)
+	{
+		freeCustomer(&pSupermarket->customerArr[i]);
+	}
+	free(pSupermarket->customerArr); // free customers
 	pSupermarket->customerArr = NULL;
 	for (int i = 0; i < pSupermarket->productArrSize; i++) // products
 	{

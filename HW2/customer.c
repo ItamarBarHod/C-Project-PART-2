@@ -24,7 +24,7 @@ Customer* initCustomer()
 	if (!tempCustomer->cart)
 	{
 		printf("Customer MEMORY ERROR\n");
-		freeCustomer(tempCustomer); // free
+		freeTempCustomer(tempCustomer); // free
 		return NULL;
 	}
 	tempCustomer->name = NULL;
@@ -43,14 +43,23 @@ Customer* createNewCustomer(char* customerName)
 	{
 		return NULL;
 	}
-	tempCustomer->name = _strdup(customerName);
+	tempCustomer->name = _strdup(customerName); // malloc
 	if (!tempCustomer->name)
 	{
 		printf("Customer MEMORY ERROR\n");
-		freeCustomer(tempCustomer); // free
+		freeTempCustomer(tempCustomer); // free
 		return NULL;
 	}
 	return tempCustomer;
+}
+
+void freeTempCustomer(Customer* pCustomer)
+{
+	free(pCustomer->name);
+	freeShoppingCart(pCustomer->cart);
+	pCustomer->cart = NULL;
+	free(pCustomer);
+	pCustomer = NULL;
 }
 
 void freeCustomer(Customer* pCustomer)
@@ -59,6 +68,4 @@ void freeCustomer(Customer* pCustomer)
 	pCustomer->name = NULL;
 	freeShoppingCart(pCustomer->cart);
 	pCustomer->cart = NULL;
-	free(pCustomer);
-	pCustomer = NULL;
 }

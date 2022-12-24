@@ -48,20 +48,23 @@ void freeShoppingCart(Shoppingcart* pShoppingCart)
 
 int addItemToCart(Shoppingcart* pShoppingCart, Product* pProduct, int numberToPurchase)
 {
-	Shoppingitem* newItem = initShoppingItem(pProduct); // malloc
+	Shoppingitem* newItem = initShoppingItem(); // malloc
 	if (!newItem)
 	{
 		printf("MEMORY ERROR\n");
 		return 0;
 	}
-	int cartSize = pShoppingCart->shoppingCartSize;
-	Shoppingitem** tempArr = (Shoppingitem**)realloc(pShoppingCart->itemsArr, (cartSize + 1) * sizeof(Shoppingitem*)); // malloc
+	int cartSize = pShoppingCart->shoppingCartSize + 1;
+	Shoppingitem** tempArr = (Shoppingitem**)realloc(pShoppingCart->itemsArr, cartSize * sizeof(Shoppingitem*)); // malloc
 	if (!tempArr)
 	{
 		printf("MEMORY ERROR\n");
 		return 0;
 	}
-	tempArr[cartSize] = newItem;
+	strcpy(newItem->barcode, pProduct->barcode);
+	newItem->amount = numberToPurchase;
+	newItem->price = pProduct->price;
+	tempArr[cartSize - 1] = newItem;
 	pShoppingCart->shoppingCartSize++;
 	pShoppingCart->itemsArr = tempArr;
 	return 1;
