@@ -5,7 +5,7 @@ void printAddress(const Address* pAdd)
 	printf("Address: %s, %d, %s\n", pAdd->streetName, pAdd->streetNum, pAdd->city);
 }
 
-Address* getAddressData()
+Address* initAddress()
 {
 	char* tempAddress = getAddressFromUser(); // malloc string
 	if (!tempAddress)
@@ -15,14 +15,14 @@ Address* getAddressData()
 	Address* newAddress = (Address*)malloc(sizeof(Address)); // malloc
 	if (!newAddress)
 	{
-		printf("MEMORY ERROR\n");
-		free(tempAddress);
+		printf("MEMORY ERROR: Could not init address\n");
+		free(tempAddress); // free 
 		return NULL;
 	}
 	int isValid = fixValidAddress(newAddress, tempAddress);
 	if (!isValid)
 	{
-		free(tempAddress);
+		free(tempAddress); // free
 		freeAddress(newAddress);
 		free(newAddress); // freeaddress is made for supermarket abstraction
 		return NULL;
@@ -66,5 +66,6 @@ void printAddressInstructions()
 	printf("House number must only be a number\n");
 	printf("Street and city must only be alphanumeric\n");
 	printf("Street and city can have spaces\n");
+	printf("Example: vitkin#9#herzelia\n");
 }
 

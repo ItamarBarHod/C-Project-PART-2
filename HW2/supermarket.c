@@ -9,7 +9,7 @@ int createSuperMarket(Supermarket* pSupermarket)
 		return 0;
 	}
 	printAddressInstructions();
-	pSupermarket->marketAddress = *getAddressData();
+	pSupermarket->marketAddress = *initAddress();
 	if (!&pSupermarket->marketAddress)
 	{
 		return 0;
@@ -378,7 +378,7 @@ void freeSuperMarket(Supermarket* pSupermarket)
 	{
 		freeCustomer(&pSupermarket->customerArr[i]);
 	}
-	free(pSupermarket->customerArr); // free customers
+	free(pSupermarket->customerArr); // free customer arr
 	pSupermarket->customerArr = NULL;
 	for (int i = 0; i < pSupermarket->productArrSize; i++) // products
 	{
@@ -386,5 +386,6 @@ void freeSuperMarket(Supermarket* pSupermarket)
 	}
 	free(pSupermarket->productArr);
 	pSupermarket->productArr = NULL;
+	pSupermarket = NULL;
 }
 

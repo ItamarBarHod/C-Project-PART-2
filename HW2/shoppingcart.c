@@ -93,7 +93,7 @@ void printCartAndPrice(Shoppingcart* pCart)
 	{
 		printShoppingCart(pCart);
 		printf("Paying! Price of to pay: %.2lf\n", calcShoppingCart(pCart));
-		freeShoppingCart(pCart);
+		freeShoppingCart(pCart); // free
 		pCart = initShoppingCart(); // malloc
 		if (!pCart)
 		{

@@ -11,7 +11,7 @@ typedef struct {
 }Address;
 
 void printAddress(const Address* pAdd);
-Address* getAddressData();
+Address* initAddress();
 void freeAddress(Address* pAdd);
 int fixValidAddress(Address* pAdd, char* address);
 void printAddressInstructions();
