@@ -15,4 +15,5 @@ void printAndReturnCart(Shoppingcart* pCart);
 int addItemToCartHelper(Shoppingcart* pShoppingCart, Shoppingitem* newItem);
 double calcShoppingCart(const Shoppingcart* pShoppingCart);
 Shoppingitem* checkItemExists(const Shoppingcart* pShoppingCart, const Product* pProduct);
+void returnShoppingCart(Shoppingcart* pShoppingCart);
 void freeShoppingCart(Shoppingcart* pShoppingCart);

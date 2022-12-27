@@ -28,13 +28,9 @@ void printMarket(const Supermarket* pSupermarket)
 	printf("There are %d product(s)\n", pSupermarket->productArrSize);
 	printf("Product Name ------------ | BARCODE | Type  -------- | Price ------ | Stock \n");
 	printf("----------------------------------------------------------------------------\n");
-	for (int i = 0; i < pSupermarket->productArrSize; i++)
-	{
-		printProduct(pSupermarket->productArr[i]);
-	}
-	printf("\nThere are %d listed customer(s)\n", pSupermarket->customerArrSize);
-	printCustomers(pSupermarket);
-	printf("\n");
+	printMarketProducts(pSupermarket);
+	printf("There are %d listed customer(s)\n", pSupermarket->customerArrSize);
+	printMarketCustomers(pSupermarket);
 }
 
 void addProduct(Supermarket* pSupermarket)
@@ -181,6 +177,14 @@ void customerShopping(Supermarket* pSupermarket, const Customer* pCustomer)
 	}
 }
 
+void printMarketProducts(const Supermarket* pSupermarket)
+{
+	for (int i = 0; i < pSupermarket->productArrSize; i++)
+	{
+		printProduct(pSupermarket->productArr[i]);
+	}
+	printf("\n");
+}
 Product* getExistingProductFromUser(const Supermarket* pSupermarket)
 {
 	Product* isProductExist = NULL;
@@ -189,7 +193,8 @@ Product* getExistingProductFromUser(const Supermarket* pSupermarket)
 		isProductExist = checkProductExists(pSupermarket, barcode);
 		if (!isProductExist)
 		{
-			printf("Error: Barcode does not exist! please re-enter\n\n");
+			printf("Error: Barcode does not exist! please enter an existing one from the list:\n\n");
+			printMarketProducts(pSupermarket);
 			free(barcode); // free
 		}
 	} while (!isProductExist);
@@ -234,7 +239,7 @@ int checkValidMarket(const Supermarket* pSupermarket)
 void printCustomerShoppingCart(const Supermarket* pSupermarket)
 {
 	printf("Printing existing customers:\n");
-	printCustomers(pSupermarket);
+	printMarketCustomers(pSupermarket);
 	printf("Please enter an existing customer name:\n");
 	char tempCustomerName[MAX_SIZE];
 	if (!myGets(tempCustomerName, MAX_SIZE))
@@ -259,13 +264,14 @@ void printCustomerShoppingCart(const Supermarket* pSupermarket)
 	printf("Price of all items in cart: %.2lf\n", calcShoppingCart(pCart));
 }
 
-void printCustomers(const Supermarket* pSupermarket)
+void printMarketCustomers(const Supermarket* pSupermarket)
 {
 	for (int i = 0; i < pSupermarket->customerArrSize; i++)
 	{
 		printf("%d: ", i + 1);
 		printCustomer(&pSupermarket->customerArr[i]);
 	}
+	printf("\n");
 }
 
 void customerCheckout(const Supermarket* pSupermarket)
@@ -276,7 +282,7 @@ void customerCheckout(const Supermarket* pSupermarket)
 		return;
 	}
 	printf("Printing existing customers:\n");
-	printCustomers(pSupermarket);
+	printMarketCustomers(pSupermarket);
 	printf("Please enter a customer name to checkout\n");
 	char tempCustomerName[MAX_SIZE];
 	if (!myGets(tempCustomerName, MAX_SIZE))

@@ -30,7 +30,8 @@ void exitMarket(Supermarket* pSupermarket);
 void freeSuperMarket(Supermarket* pSupermarket);
 
 // helpers / extra
-void printCustomers(const Supermarket* pSupermarket);
+void printMarketCustomers(const Supermarket* pSupermarket);
+void printMarketProducts(const Supermarket* pSupermarket);
 int addProductHelper(Supermarket* pSupermarket, Product* pProduct);
 int addCustomerHelper(Supermarket* pSupermarket, Customer* pCustomer);
 void customerShopping(Supermarket* pSupermarket, const Customer* pCustomer);

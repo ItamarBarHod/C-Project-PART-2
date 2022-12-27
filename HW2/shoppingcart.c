@@ -34,6 +34,17 @@ double calcShoppingCart(const Shoppingcart* pShoppingCart)
 	return sum;
 }
 
+void returnShoppingCart(Shoppingcart* pShoppingCart)
+{
+	for (int i = 0; i < pShoppingCart->shoppingCartSize; i++)
+	{
+		freeShoppingItem(pShoppingCart->itemsArr[i]);
+	}
+	free(pShoppingCart->itemsArr);
+	pShoppingCart->itemsArr = NULL;
+	pShoppingCart->shoppingCartSize = 0;
+}
+
 void freeShoppingCart(Shoppingcart* pShoppingCart)
 {
 	for (int i = 0; i < pShoppingCart->shoppingCartSize; i++)
@@ -93,14 +104,7 @@ void printAndReturnCart(Shoppingcart* pCart)
 	{
 		printShoppingCart(pCart);
 		printf("Paying! Price of to pay: %.2lf\n", calcShoppingCart(pCart));
-		Shoppingcart* tempCart = pCart;
-		freeShoppingCart(pCart); // free
-		tempCart = initShoppingCart(); // malloc
-		if (!pCart)
-		{
-			printf("MEMORY ERROR\n");
-			return;
-		}
+		returnShoppingCart(pCart);
 		printf("Returned shopping cart!\n");
 		printf("--------PAYMENT DONE--------\n");
 		return;
