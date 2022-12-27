@@ -50,18 +50,18 @@ void addProduct(Supermarket* pSupermarket)
 		Product* newProduct = createNewProduct(barcode); // malloc product
 		if (!newProduct)
 		{
-			free(barcode); // free barcode
 			return;
 		}
 		int reallocSuccess = addProductHelper(pSupermarket, newProduct);
 		if (!reallocSuccess)
 		{
-			free(barcode); // free barcode
 			freeProduct(newProduct); // free product
 		}
-		return;
 	}
-	addAmountToExistingProduct(isProductExist);
+	else
+	{
+		addAmountToExistingProduct(isProductExist);
+	}
 	free(barcode); // free barcode
 }
 
@@ -290,7 +290,7 @@ void customerCheckout(const Supermarket* pSupermarket)
 		printf("Error: No such customer exists, returning to main menu\n");
 		return;
 	}
-	printCartAndPrice(isCustomerExist->cart);
+	printAndReturnCart(isCustomerExist->cart);
 }
 
 void printProductType(const Supermarket* pSupermarket)

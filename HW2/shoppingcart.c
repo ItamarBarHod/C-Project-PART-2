@@ -87,14 +87,15 @@ int addItemToCartHelper(Shoppingcart* pShoppingCart, Shoppingitem* newItem)
 	return 1;
 }
 
-void printCartAndPrice(Shoppingcart* pCart)
+void printAndReturnCart(Shoppingcart* pCart)
 {
 	if (pCart->shoppingCartSize > 0)
 	{
 		printShoppingCart(pCart);
 		printf("Paying! Price of to pay: %.2lf\n", calcShoppingCart(pCart));
+		Shoppingcart* tempCart = pCart;
 		freeShoppingCart(pCart); // free
-		pCart = initShoppingCart(); // malloc
+		tempCart = initShoppingCart(); // malloc
 		if (!pCart)
 		{
 			printf("MEMORY ERROR\n");
