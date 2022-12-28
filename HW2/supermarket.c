@@ -29,7 +29,6 @@ void printMarket(const Supermarket* pSupermarket)
 	printf("Product Name ------------ | BARCODE | Type  -------- | Price ------ | Stock \n");
 	printf("----------------------------------------------------------------------------\n");
 	printMarketProducts(pSupermarket);
-	printf("There are %d listed customer(s)\n", pSupermarket->customerArrSize);
 	printMarketCustomers(pSupermarket);
 }
 
@@ -93,11 +92,9 @@ void addCustomer(Supermarket* pSupermarket)
 		{
 			return;
 		}
-		printf("Adding customer: %s\n", tempCustomerName);
 		int reallocSuccess = addCustomerHelper(pSupermarket, newCustomer); // add new customer
 		if (!reallocSuccess)
 		{
-			printf("ERROR: Could not add customer\n");
 			freeTempCustomer(newCustomer); // free customer
 		}
 		return;
@@ -107,6 +104,7 @@ void addCustomer(Supermarket* pSupermarket)
 
 int addCustomerHelper(Supermarket* pSupermarket, Customer* pCustomer)
 {
+	printf("Adding customer: %s\n", pCustomer->name);
 	int newArrSize = pSupermarket->customerArrSize + 1;
 	Customer* newCustomerArr = (Customer*)realloc(pSupermarket->customerArr, newArrSize * sizeof(Customer));
 	if (!newCustomerArr)
@@ -154,22 +152,16 @@ void customerShopping(Supermarket* pSupermarket, const Customer* pCustomer)
 		printf("Error: Market out of stock! returning\n");
 		return;
 	}
-	Product* isProductExist = getExistingProductFromUser(pSupermarket);
-	if (!isProductExist)
-	{
-		printf("MEMORY ERROR\n");
-		return;
-	}
-	int amount = getAmountToBuyFromUser(isProductExist);
+	Product* existingProd = getExistingProductFromUser(pSupermarket);
+	int amount = getAmountToBuyFromUser(existingProd);
 	if (amount != 0)
 	{
-		int isAdded = addItemToCart(pCustomer->cart, isProductExist, amount);
+		int isAdded = addItemToCart(pCustomer->cart, existingProd, amount);
 		if (!isAdded)
 		{
 			return; // adding failed - prints error inside
 		}
 	}
-	printf("Would you like to continue shopping?\n");
 	int proceedShopping = askUserToContinue();
 	if (proceedShopping)
 	{
@@ -238,7 +230,11 @@ int checkValidMarket(const Supermarket* pSupermarket)
 
 void printCustomerShoppingCart(const Supermarket* pSupermarket)
 {
-	printf("Printing existing customers:\n");
+	if (pSupermarket->customerArrSize == 0)
+	{
+		printf("Error: no customers exist yet\n");
+		return;
+	}
 	printMarketCustomers(pSupermarket);
 	printf("Please enter an existing customer name:\n");
 	char tempCustomerName[MAX_SIZE];
@@ -259,13 +255,13 @@ void printCustomerShoppingCart(const Supermarket* pSupermarket)
 		printf("Error: customer has no items in his cart yet!\n");
 		return;
 	}
-	printf("Printing customer %s cart:\n", isCustomerExist->name);
-	printShoppingCart(pCart);
-	printf("Price of all items in cart: %.2lf\n", calcShoppingCart(pCart));
+	printCustomerCartHelper(isCustomerExist);
 }
 
 void printMarketCustomers(const Supermarket* pSupermarket)
 {
+
+	printf("There are %d listed customer(s)\n", pSupermarket->customerArrSize);
 	for (int i = 0; i < pSupermarket->customerArrSize; i++)
 	{
 		printf("%d: ", i + 1);
@@ -281,7 +277,6 @@ void customerCheckout(const Supermarket* pSupermarket)
 		printf("Error: No customers exist yet\n");
 		return;
 	}
-	printf("Printing existing customers:\n");
 	printMarketCustomers(pSupermarket);
 	printf("Please enter a customer name to checkout\n");
 	char tempCustomerName[MAX_SIZE];

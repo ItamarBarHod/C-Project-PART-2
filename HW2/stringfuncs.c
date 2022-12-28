@@ -87,6 +87,15 @@ int isOnlySpaces(const char* str)
 	return 1;
 }
 
+void fixLastSpacesAndCapital(char* tempString, char* lastWord, int index)
+{
+	index -= (int)strlen(lastWord) + 2;
+	tempString[index] = tolower(tempString[index]);
+	index += (int)strlen(lastWord);
+	tempString[index] = '\0';
+	tempString[0] = toupper(tempString[0]);
+}
+
 int isOnlyNumbers(const char* str)
 {
 	while (*str)
@@ -113,6 +122,16 @@ int isValidAddressSections(const char* str) // split to 3 sections and check
 	char* street = strtok(temp, delimiter);
 	char* streetNum = strtok(NULL, delimiter);
 	char* city = strtok(NULL, delimiter);
+	if (!isValidAddress(street, streetNum, city))
+	{
+		return 0;
+	}
+	free(temp); // free
+	return 1;
+}
+
+int isValidAddress(char* street, char* streetNum, char* city)
+{
 	if (!street || !IsAlphanumeric(street) || isOnlySpaces(street))
 	{
 		return 0;
@@ -125,7 +144,6 @@ int isValidAddressSections(const char* str) // split to 3 sections and check
 	{
 		return 0;
 	}
-	free(temp); // free
 	return 1;
 }
 
@@ -151,30 +169,13 @@ int validTokens(const char* str)
 char* fixAddressStreetAndCity(char* str)
 {
 	char tempString[MAX_SIZE] = { 0 };
-	const char* delimiter = " ";
-	char* token, * lastWord;
-	token = strtok(str, delimiter);
-	if (!token)
+	int index = 0;
+	char* lastWord = createAddressString(str, tempString, &index);
+	if (!lastWord)
 	{
-		printf("ADDRESS MEMORY ERROR\n");
 		return NULL;
 	}
-	lastWord = token;
-	int index = 0;
-	while (token)
-	{
-		*token = toupper(*token);
-		strcat(tempString, token);
-		strcat(tempString, "  ");
-		index += (int)strlen(token) + 2;
-		lastWord = token;
-		token = strtok(NULL, delimiter);
-	}
-	index -= (int)strlen(lastWord) + 2;
-	tempString[index] = tolower(tempString[index]);
-	index += (int)strlen(lastWord);
-	tempString[index] = '\0';
-	tempString[0] = toupper(tempString[0]);
+	fixLastSpacesAndCapital(tempString, lastWord, index);
 	char* fixedString = _strdup(tempString); // malloc
 	if (!fixedString)
 	{
@@ -182,4 +183,28 @@ char* fixAddressStreetAndCity(char* str)
 		return NULL;
 	}
 	return fixedString;
+}
+
+char* createAddressString(char* str, char* tempString, int* index)
+{
+	const char* delimiter = " ";
+	char* lastWord = NULL;
+	char* token = strtok(str, delimiter);
+	if (!token)
+	{
+		printf("ADDRESS MEMORY ERROR\n");
+		return NULL;
+	}
+	lastWord = token;
+	while (token)
+	{
+		*token = toupper(*token);
+		strcat(tempString, token);
+		strcat(tempString, "  ");
+		*index += (int)strlen(token) + 2;
+		lastWord = token;
+		token = strtok(NULL, delimiter);
+	}
+
+	return lastWord;
 }

@@ -16,4 +16,7 @@ int isValidAddressFormat(const char* str);
 int isValidAddressSections(const char* str);
 int validTokens(const char* str);
 int isOnlySpaces(const char* str);
+void fixLastSpacesAndCapital(char* tempString, char* lastWord, int index);
+int isValidAddress(char* street, char* streetNum, char* city);
 char* fixAddressStreetAndCity(char* str);
+char* createAddressString(char* str, char* tempString, int* index);

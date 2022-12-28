@@ -53,6 +53,13 @@ Customer* createNewCustomer(char* customerName)
 	return tempCustomer;
 }
 
+void printCustomerCartHelper(Customer* pCustomer)
+{
+	printf("Printing customer %s cart:\n", pCustomer->name);
+	printShoppingCart(pCustomer->cart);
+	printf("Price of all items in cart: %.2lf\n", calcShoppingCart(pCustomer->cart));
+}
+
 void freeTempCustomer(Customer* pCustomer)
 {
 	free(pCustomer->name);

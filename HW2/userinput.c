@@ -106,6 +106,7 @@ char* getAddressFromUser()
 
 int askUserToContinue()
 {
+	printf("Would you like to continue shopping?\n");
 	printf("Enter Y/y to continue, else enter a random character\n");
 	char answer;
 	do {
